@@ -1,4 +1,8 @@
-<?php include 'fetch_grades.php'; ?>
+<?php 
+session_start();
+
+include 'fetch_grades.php'; 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,6 +37,29 @@
 
   <button class="btn" type="submit">🔍 Filter</button>
   <a href="index.php" class="btn">🔄 Reset</a>
+</form>
+
+<h2>Add New Grade</h2>
+
+<!-- Display error message if available -->
+<?php if (isset($_SESSION['error'])): ?>
+  <div class="error-message" style="color: red; text-align: center; margin-bottom: 20px;">
+    <?= htmlspecialchars($_SESSION['error']); ?>
+  </div>
+  <?php unset($_SESSION['error']); ?> <!-- Clear the error after displaying it -->
+<?php endif; ?>
+
+<form method="POST" action="insert_grade.php" style="text-align: center; margin-bottom: 30px;">
+  <label for="new_student">👤 Student:</label>
+  <input name="new_student" id="new_student" required/>
+
+  <label for="new_subject">📘 Subject:</label>
+  <input name="new_subject" id="new_subject" required/>
+
+  <label for="new_grade">📝 Grade:</label>
+  <input name="new_grade" id="new_grade" required/>
+
+  <button type="submit" class="btn">Add grade</button>
 </form>
 
 <table>

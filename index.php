@@ -74,13 +74,13 @@ include 'fetch_grades.php';
   <tbody>
     <?php if (count($grades) > 0): ?>
       <?php foreach ($grades as $row): ?>
-        <tr>
+        <tr data-student-id="<?= htmlspecialchars($row['student_id']) ?>" data-subject-id="<?= htmlspecialchars($row['subject_id']) ?>">
           <td><?= htmlspecialchars($row['student_name']) ?></td>
           <td><?= htmlspecialchars($row['subject_name']) ?></td>
           <td><?= htmlspecialchars($row['grade']) ?></td>
           <td>
-            <button class="edit">Edit</button>
-            <button class="delete">Delete</button>
+            <button class="edit" onclick="editGrade(this)">Edit</button>
+            <button class="delete" onclick="deleteGrade(this)">Delete</button>
           </td>
         </tr>
       <?php endforeach; ?>
@@ -90,6 +90,6 @@ include 'fetch_grades.php';
   </tbody>
 </table>
 
-<script src="edit_grade.js"></script>
+<script src="actions.js"></script>
 </body>
 </html>

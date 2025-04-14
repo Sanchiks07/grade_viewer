@@ -15,7 +15,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   background: #2a2a2a;
-  box-shadow: 0 0 15px rgba(0, 255, 128, 0.2);
+  box-shadow: 0 0 15px #00ff8033;
   animation: fadeIn 1.2s ease;
 }
   
@@ -40,47 +40,112 @@ tr:hover {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.save {
-  background-color: #66ff99;
-  border: none;
-  color: #1c1c1c;
-  padding: 10px 18px;
-  text-align: center;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 20px;
-}
-
-.save:hover {
-  background-color: #33cc77;
-}
-
+/* Base overlay */
 .popup {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Dark, subtle backdrop */
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 999;
+  justify-content: center;
+  z-index: 9999;
 }
 
+/* Pop-up box styling */
 .popup-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 300px;
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  max-width: 90%;
+  text-align: left;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  animation: popup-fadein 0.3s ease;
 }
 
-.popup .close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 20px;
+/* Header */
+.popup-content h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+}
+
+/* Input group */
+.input-group label {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #444;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+  border-color: #007BFF;
+  outline: none;
+}
+
+/* Buttons */
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.popup-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
   cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s ease-in-out;
+}
+
+button.save {
+  background-color: #28a745;
+  color: white;
+}
+
+button.cancel {
+  background-color: #dc3545;
+  color: white;
+}
+
+button.save:hover {
+  background-color: #218838;
+}
+
+button.cancel:hover {
+  background-color: #c82333;
+}
+
+button.save:active,
+button.cancel:active {
+  transform: scale(0.98);
+}
+
+/* Animation */
+@keyframes popup-fadein {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

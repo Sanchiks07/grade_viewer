@@ -1,44 +1,37 @@
 <?php
-session_start();
+require_once 'config.php';
 
-require "config.php";
+// Debugging: Log the incoming data
+error_log('Incoming Data: ' . print_r($_POST, true));
 
-// Check if the form was submitted with the correct POST parameters
-if (isset($_POST['edit_student']) && isset($_POST['edit_subject']) && isset($_POST['edit_grade'])) {
-    // Get the updated values from the form submission
-    $student = htmlspecialchars($_POST['edit_student']);
-    $subject = htmlspecialchars($_POST['edit_subject']);
-    $grade = (int)$_POST['edit_grade'];  // Make sure the grade is an integer
-
-    // Validate the input
-    if (empty($student) || empty($subject) || empty($grade)) {
-        $_SESSION['error'] = "All fields are required!";
-        echo json_encode(['success' => false, 'message' => 'All fields are required!']);
-        exit;
-    }
-
-    // Update the grade in the database
-    try {
-        // Prepare SQL statement to update the grade
-        $stmt = $pdo->prepare("UPDATE grades SET grade = :grade WHERE student_name = :student AND subject_name = :subject");
-        $stmt->bindParam(':grade', $grade, PDO::PARAM_INT);
-        $stmt->bindParam(':student', $student, PDO::PARAM_STR);
-        $stmt->bindParam(':subject', $subject, PDO::PARAM_STR);
-
-        // Execute the statement
-        if ($stmt->execute()) {
-            // Return success response
-            echo json_encode(['success' => true, 'message' => 'Grade updated successfully!']);
-        } else {
-            // Return failure response
-            echo json_encode(['success' => false, 'message' => 'Error updating grade.']);
-        }
-    } catch (PDOException $e) {
-        // If there's a database error, output it
-        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
-    }
-} else {
-    // Handle case where form values are missing
-    echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+// Validate incoming data
+if (!isset($_POST['student_id'], $_POST['subject_id'], $_POST['grade'], $_POST['student_name'], $_POST['subject_name'])) {
+    echo json_encode(['success' => false, 'error' => 'Invalid data']);
+    exit;
 }
-?>
+
+$studentId = $_POST['student_id'];
+$subjectId = $_POST['subject_id'];
+$grade = $_POST['grade'];
+$studentName = $_POST['student_name'];
+$subjectName = $_POST['subject_name'];
+
+// Make sure the student and subject IDs exist in their respective tables
+try {
+    // Update grade
+    $stmt = $pdo->prepare("UPDATE grades SET grade = :grade WHERE student_id = :student_id AND subject_id = :subject_id");
+    $stmt->execute(['grade' => $grade, 'student_id' => $studentId, 'subject_id' => $subjectId]);
+
+    // Update student name (if needed)
+    $stmt = $pdo->prepare("UPDATE students SET name = :student_name WHERE id = :student_id");
+    $stmt->execute(['student_name' => $studentName, 'student_id' => $studentId]);
+
+    // Update subject name (if needed)
+    $stmt = $pdo->prepare("UPDATE subjects SET subject_name = :subject_name WHERE id = :subject_id");
+    $stmt->execute(['subject_name' => $subjectName, 'subject_id' => $subjectId]);
+
+    echo json_encode(['success' => true]);
+} catch (Exception $e) {
+    error_log("Error updating grade: " . $e->getMessage());
+    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+}

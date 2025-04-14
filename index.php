@@ -57,7 +57,7 @@ include 'fetch_grades.php';
   <input name="new_subject" id="new_subject" required/>
 
   <label for="new_grade">📝 Grade:</label>
-  <input name="new_grade" id="new_grade" required/>
+  <input name="new_grade" id="new_grade" type="number" required/>
 
   <button type="submit" class="btn">Add grade</button>
 </form>
@@ -68,6 +68,7 @@ include 'fetch_grades.php';
       <th>Student</th>
       <th>Subject</th>
       <th>Grade</th>
+      <th>-</th>
     </tr>
   </thead>
   <tbody>
@@ -77,6 +78,10 @@ include 'fetch_grades.php';
           <td><?= htmlspecialchars($row['student_name']) ?></td>
           <td><?= htmlspecialchars($row['subject_name']) ?></td>
           <td><?= htmlspecialchars($row['grade']) ?></td>
+          <td>
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+          </td>
         </tr>
       <?php endforeach; ?>
     <?php else: ?>
@@ -85,5 +90,6 @@ include 'fetch_grades.php';
   </tbody>
 </table>
 
+<script src="edit_grade.js"></script>
 </body>
 </html>
